@@ -3,10 +3,11 @@ from torch.utils.data import DataLoader
 
 def make_data_loader(args, **kwargs):
 
-    if args.dataset == 'pascal':
+    if args.dataset == 'pascal': 
         train_set = pascal.VOCSegmentation(args, split='train')
-        val_set = pascal.VOCSegmentation(args, split='val')
+        val_set = pascal.VOCSegmentation(args, split='val') 
         if args.use_sbd:
+            print("use_sbd", use_sbd)
             sbd_train = sbd.SBDSegmentation(args, split=['train', 'val'])
             train_set = combine_dbs.CombineDBs([train_set, sbd_train], excluded=[val_set])
 
