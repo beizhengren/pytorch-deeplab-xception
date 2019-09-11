@@ -1,1 +1,0 @@
- python demo.py --in-path girl.jpg --backbone mobilenet --ckpt ./deeplab-mobilenet.pth.tar --out-path result.jpg     
