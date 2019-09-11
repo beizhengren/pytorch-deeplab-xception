@@ -1,3 +1,13 @@
+# Some testing files
+tar/
+test/
+result/
+*.tar
+*.jpg
+*.png
+*.pth
+*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

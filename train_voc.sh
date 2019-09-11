@@ -1,1 +1,2 @@
-CUDA_VISIBLE_DEVICES=0,1,2,3 python train.py --backbone resnet --lr 0.007 --workers 4 --use-sbd True --epochs 50 --batch-size 16 --gpu-ids 0,1,2,3 --checkname deeplab-resnet --eval-interval 1 --dataset pascal
+#CUDA_VISIBLE_DEVICES=0,1,2,3 python train.py --backbone mobilenet --lr 0.007 --workers 4 --use-sbd --epochs 50 --batch-size 4 --gpu-ids 0 --checkname deeplab-resnet --eval-interval 1 --dataset pascal
+horovodrun -np 1 -H localhost:1 python train.py --backbone mobilenet --lr 0.0008 --workers 4 --epochs 250 --batch-size 4 --gpu-ids 0 --checkname deeplab-mobilenet --eval-interval 5 --dataset pascal --resume wyz.200.pth.tar

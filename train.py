@@ -17,18 +17,17 @@ from utils.metrics import Evaluator
 class Trainer(object):
     def __init__(self, args):
         self.args = args
-
-        # Define Saver
+       # Define Saver
         self.saver = Saver(args)
         self.saver.save_experiment_config()
-        # Define Tensorboard Summary
+       # Define Tensorboard Summary
         self.summary = TensorboardSummary(self.saver.experiment_dir)
         self.writer = self.summary.create_summary()
         
         # Define Dataloader
         kwargs = {'num_workers': args.workers, 'pin_memory': True}
         self.train_loader, self.val_loader, self.test_loader, self.nclass = make_data_loader(args, **kwargs)
-
+        print("self.nclass is: ", self.nclass)
         # Define network
         model = DeepLab(num_classes=self.nclass,
                         backbone=args.backbone,
@@ -46,6 +45,7 @@ class Trainer(object):
         # Define Criterion
         # whether to use class balanced weights
         if args.use_balanced_weights:
+            print(args.dataset)
             classes_weights_path = os.path.join(Path.db_root_dir(args.dataset), args.dataset+'_classes_weights.npy')
             if os.path.isfile(classes_weights_path):
                 weight = np.load(classes_weights_path)
@@ -185,7 +185,7 @@ def main():
     parser.add_argument('--dataset', type=str, default='pascal',
                         choices=['pascal', 'coco', 'cityscapes'],
                         help='dataset name (default: pascal)')
-    parser.add_argument('--use-sbd', action='store_true', default=True,
+    parser.add_argument('--use_sbd', type=bool, default=False,
                         help='whether to use SBD dataset (default: True)')
     parser.add_argument('--workers', type=int, default=4,
                         metavar='N', help='dataloader threads')
@@ -248,6 +248,7 @@ def main():
                         help='skip validation during training')
 
     args = parser.parse_args()
+    print("use sbd1", args.use_sbd)
     args.cuda = not args.no_cuda and torch.cuda.is_available()
     if args.cuda:
         try:

@@ -28,6 +28,7 @@ class Decoder(nn.Module):
                                        nn.ReLU(),
                                        nn.Dropout(0.1),
                                        nn.Conv2d(256, num_classes, kernel_size=1, stride=1))
+        # print("self.last_conv is :", self.last_conv)
         self._init_weight()
 
 

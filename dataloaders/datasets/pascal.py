@@ -11,7 +11,7 @@ class VOCSegmentation(Dataset):
     """
     PascalVoc dataset
     """
-    NUM_CLASSES = 21
+    NUM_CLASSES = 3
 
     def __init__(self,
                  args,
