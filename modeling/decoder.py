@@ -28,7 +28,7 @@ class Decoder(nn.Module):
                                        nn.ReLU(),
                                        nn.Dropout(0.1),
                                        nn.Conv2d(256, num_classes, kernel_size=1, stride=1))
-        # print("self.last_conv is :", self.last_conv)
+        #self.upsample = nn.ConvTranspose2d(256, 256, 3, 4, 1)
         self._init_weight()
 
 
@@ -37,10 +37,11 @@ class Decoder(nn.Module):
         low_level_feat = self.bn1(low_level_feat)
         low_level_feat = self.relu(low_level_feat)
 
-        x = F.interpolate(x, size=low_level_feat.size()[2:], mode='bilinear', align_corners=True)
+        sh = torch.tensor(low_level_feat.shape)
+        x = F.interpolate(x, size=(sh[2], sh[3]), mode='nearest')
+
         x = torch.cat((x, low_level_feat), dim=1)
         x = self.last_conv(x)
-
         return x
 
     def _init_weight(self):

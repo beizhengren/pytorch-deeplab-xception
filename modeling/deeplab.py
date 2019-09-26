@@ -7,7 +7,7 @@ from modeling.decoder import build_decoder
 from modeling.backbone import build_backbone
 
 class DeepLab(nn.Module):
-    def __init__(self, backbone='mobilenet', output_stride=16, num_classes=21,
+    def __init__(self, backbone='mobilenet', output_stride=16, num_classes=3,
                  sync_bn=True, freeze_bn=False):
         super(DeepLab, self).__init__()
         if backbone == 'drn':
@@ -26,11 +26,13 @@ class DeepLab(nn.Module):
             self.freeze_bn()
 
     def forward(self, input):
+        print("input.shape is {}".format(input.shape))
         x, low_level_feat = self.backbone(input)
         x = self.aspp(x)
         x = self.decoder(x, low_level_feat)
-        x = F.interpolate(x, size=input.size()[2:], mode='bilinear', align_corners=True)
 
+        sh = torch.tensor(input.shape)
+        x = F.interpolate(x, size=(sh[2], sh[3]), mode='nearest')
         return x
 
     def freeze_bn(self):

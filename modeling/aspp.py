@@ -61,20 +61,20 @@ class ASPP(nn.Module):
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(0.5)
         self._init_weight()
-
     def forward(self, x):
         x1 = self.aspp1(x)
         x2 = self.aspp2(x)
         x3 = self.aspp3(x)
         x4 = self.aspp4(x)
         x5 = self.global_avg_pool(x)
-        x5 = F.interpolate(x5, size=x4.size()[2:], mode='bilinear', align_corners=True)
+
+        sh = torch.tensor(x4.shape)
+        x5 = F.interpolate(x5, size=(sh[2], sh[3]), mode='nearest')
         x = torch.cat((x1, x2, x3, x4, x5), dim=1)
 
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
-
         return self.dropout(x)
 
     def _init_weight(self):
